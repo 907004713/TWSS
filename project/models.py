@@ -41,9 +41,6 @@ class User(models.Model):
     department = models.ForeignKey(Department, related_name='department', default=0)
     # 密码 md5加密后的字符串
     password = models.CharField(max_length=32, default=u'未记录')
-    # 性别
-    SEX_CHOICES = ('男', '女', '未记录')
-    sex = models.CharField(max_length=3, default=u'未记录')
     # 手机号
     phone_number = models.CharField(max_length=11, default=u'未记录')
     # 邮箱
@@ -51,10 +48,26 @@ class User(models.Model):
     # 身份
     STATUS_CHOICES = ('教师', '系负责人', '教务员', '系统管理员', '未记录')
     status = models.CharField(max_length=16, default=u'未记录')
+    USER_VERIFY = ('通过', '未通过')
 
     class Meta:
         # 数据表名
         db_table = 'User'
+
+    def __unicode__(self):
+        return self.id + ' ' + self.name
+
+
+class Class(models.Model):
+    id = models.CharField(max_length=16, primary_key=True)
+    # 姓名
+    name = models.CharField(max_length=16, default=u'未记录')
+    # 职称
+    year = models.CharField(max_length=16, default=u'未记录')
+
+    class Meta:
+        # 数据表名
+        db_table = 'Class'
 
     def __unicode__(self):
         return self.id + ' ' + self.name
@@ -70,10 +83,14 @@ class Course(models.Model):
     # 授课老师
     lecture = models.ForeignKey(User, related_name='lecture')
     # 是否主修
+    class_name = models.ForeignKey(Class)
     MAJOR_CHOICES = ('主修', '代课')
     major = models.CharField(max_length=16, default=u'未记录')
     # 学分
     credit = models.IntegerField(16, default=0)
+    people = models.IntegerField(default = 0)
+    # 听课人数
+    COURSE_VERIFY = ('通过', '未通过')
 
     class Meta:
         # 数据表名
@@ -82,3 +99,26 @@ class Course(models.Model):
     def __unicode__(self):
         return self.id + ' ' + self.name
 
+
+class Project(models.Model):
+    # 课程编号
+    id = models.CharField(max_length=16, primary_key=True)
+    # 课程名称
+    magazine = models.CharField(max_length=32, default=u'未记录')
+    prize = models.CharField(max_length=32, default=u'未记录')
+    title = models.CharField(max_length=32, default=u'未记录')
+    # 论文题目或是项目题目
+    name = models.ForeignKey(User,related_name='teacher_name')
+    # 获奖老师
+
+    # 是否主修
+    class_name = models.ForeignKey(Class)
+    PROJECT_VERIFY = ('通过', '未通过')
+
+
+    class Meta:
+        # 数据表名
+        db_table = 'Project'
+
+    def __unicode__(self):
+        return self.id + ' ' + self.name

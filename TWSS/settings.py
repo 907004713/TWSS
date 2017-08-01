@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'twss',
         'USER': 'root',
-        'PASSWORD': 'zql',
+        'PASSWORD': '384400951',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
